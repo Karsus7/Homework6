@@ -1,6 +1,6 @@
 var citySearchForm = $("#citySearchForm");
 var cityInput = $("#cityInput");
-var searchedCitysGroup = $("#cityHistoryBtns");
+var searchedCityGroup = $("#cityHistoryBtns");
 
 var cityHist;
 
@@ -13,13 +13,12 @@ var curWeatherQry = "https://api.openweathermap.org/data/2.5/weather?appid="+aut
 var uvQry = "https://api.openweathermap.org/data/2.5/uvi?appid="+authKey;
 
 
-
 function printButtons(){
 
-    searchedCitysGroup.empty();
+    searchedCityGroup.empty();
 
     for(city of cityHist){
-        searchedCitysGroup.prepend( $("<button/>",{class:"btn btn-secondary btn-white city-btn", 'data-city':city, text:city}) )
+        searchedCityGroup.prepend( $("<button/>",{class:"btn btn-secondary btn-white city-btn", 'data-city':city, text:city}) )
     }
     saveHist();
 
@@ -29,7 +28,6 @@ function saveHist(){
     localStorage.setItem('history',JSON.stringify(cityHist));
 }
 
-
 function loadHist(){
     cityHist = JSON.parse(localStorage.getItem('history'));
     if(cityHist === null){
@@ -37,11 +35,9 @@ function loadHist(){
     }
 }
 
-
 function kelvToF(temp){
     return ((temp - 273.15)*(9/5) + 32).toFixed(2);
 }
-
 
 function getIcon(weather){  
     weatherIcon = $("<i/>");
@@ -50,9 +46,6 @@ function getIcon(weather){
     }
     return weatherIcon;
 }
-
-
-
 
 function getUV(response){
     //ajax call
@@ -72,12 +65,11 @@ function getUV(response){
     });
 }
 
-
 function printWeatherForCity(cityName){
     $.ajax({
         url:curWeatherQry+cityName,
         method:"GET",
-        error:function (xhr, ajaxOptions, thrownError){
+        error:function (xhr){
             if(xhr.status==404) {
                 curWeatherCard.empty();
                 curWeatherCard.append($("<h4/>",{text: "I'm sorry, but '"+cityHist.pop()+"' could not be found by Open Weather API.  I took the liberty of removing this from your history.  Please try another city!" }));
@@ -107,7 +99,6 @@ function printWeatherForCity(cityName){
         getUV(response);
     });
 }
-
 
 
 function printWeatherForecast(cityName){
